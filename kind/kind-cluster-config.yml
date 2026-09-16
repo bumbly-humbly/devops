@@ -9,5 +9,7 @@ nodes:
       - containerPort: 30478
         hostPort: 8443
         protocol: TCP
+  - role: worker
+  - role: worker
     
 

@@ -14,6 +14,14 @@ spec:
       labels: 
         app: frontend
     spec:
+    # Spread pods across different nodes
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: frontend
       containers:
         - name: frontend
           image: ghcr.io/bumbly-humbly/frontend:latest
