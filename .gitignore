@@ -1,2 +1,40 @@
-kubectl
-kubectl.sha256
+# Downloaded local tooling
+/kubectl
+/kubectl.sha256
+
+# Terraform working directory and local state
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Terraform variable files can contain credentials and environment-specific data
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Local Terraform overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+
+# Editor and operating-system files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
