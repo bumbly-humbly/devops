@@ -1,35 +1,3 @@
-terraform {
-  required_providers {
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 3.0"
-    }
-  }
-}
-variable "host" {
-  type = string
-}
-
-variable "client_certificate" {
-  type = string
-}
-
-variable "client_key" {
-  type = string
-}
-
-variable "cluster_ca_certificate" {
-  type = string
-}
-
-provider "kubernetes" {
-  host = var.host
-
-  client_certificate     = base64decode(var.client_certificate)
-  client_key             = base64decode(var.client_key)
-  cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
-}
-
 resource "kubernetes_deployment_v1" "frontend" {
   metadata {
     name = "frontend-app"
@@ -66,7 +34,7 @@ resource "kubernetes_deployment_v1" "frontend" {
         }
 
         container {
-          image = "ghcr.io/bumbly-humbly/frontend:v1.0.0"
+          image = var.docker_uri
           name  = "frontend-app"
 
           port {
@@ -86,23 +54,5 @@ resource "kubernetes_deployment_v1" "frontend" {
         }
       }
     }
-  }
-}
-
-resource "kubernetes_service_v1" "frontend" {
-  metadata {
-    name = "front-svc"
-  }
-  spec {
-    selector = {
-      App = kubernetes_deployment_v1.frontend.spec.0.template.0.metadata[0].labels.App
-    }
-    port {
-      node_port   = 31437
-      port        = 80
-      target_port = 80
-    }
-
-    type = "NodePort"
   }
 }
