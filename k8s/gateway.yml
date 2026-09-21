@@ -1,11 +1,13 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: gateway
+  name: app-web
 spec:
-  gatewayClassName: nginx
+  gatewayClassName: app-example
   listeners:
-  - name: http
+  - protocol: HTTP
     port: 80
-    protocol: HTTP
-    hostname: "*.example.com"
+    name: app-web-gw
+    allowedRoutes:
+      namespaces:
+        from: Same

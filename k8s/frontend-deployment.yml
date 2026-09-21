@@ -24,7 +24,7 @@ spec:
             app: frontend
       containers:
         - name: frontend
-          image: ghcr.io/bumbly-humbly/frontend:latest
+          image: ghcr.io/bumbly-humbly/frontend:v1.0.0
           resources:
             requests:
               memory: "64Mi"

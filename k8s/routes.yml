@@ -4,15 +4,8 @@ metadata:
   name: frontend-route
 spec:
   parentRefs:
-  - name: gateway
-    sectionName: http
-  hostnames:
-  - "frontend.example.com"
+  - name: app-web
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: frontend-service
+  - backendRefs:
+    - name: frontend-svc
       port: 80
