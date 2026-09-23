@@ -34,3 +34,41 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "250m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment-2
+  labels:
+    app: frontend-2
+spec:
+  selector:
+    matchLabels:
+      app: frontend-2
+  replicas: 2
+  template:
+    metadata:
+      labels: 
+        app: frontend-2
+  spec:
+    # Spread pods across different nodes
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: frontend-2
+
+          containers:
+            image: prsri001/devops:latest
+            imagePullPolicy: Always
+
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
