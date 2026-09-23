@@ -15,3 +15,5 @@ kubectl wait --namespace ingress-nginx \
   --timeout=120s
 
   echo "Ingress-nginx controller installed successfully"
+
+  kubectl get pods --namespace ingress-nginx -o wide
