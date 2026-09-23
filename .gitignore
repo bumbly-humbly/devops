@@ -39,4 +39,8 @@ Thumbs.db
 tmp/
 temp/
 
-AGENTs.md
+AGENTS.md
+
+#certs
+tls/*.crt
+tls/*.key
