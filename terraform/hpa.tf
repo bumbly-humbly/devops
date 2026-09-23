@@ -12,8 +12,8 @@ resource "kubernetes_horizontal_pod_autoscaler_v1" "frontend_hpa" {
 
     scale_target_ref {
       api_version = "apps/v1"
-      kind = "Deployment"
-      name = "frontend-app"
+      kind        = "Deployment"
+      name        = "frontend-app"
     }
   }
 }

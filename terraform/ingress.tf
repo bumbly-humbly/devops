@@ -7,25 +7,25 @@ resource "kubernetes_ingress_v1" "frontend" {
     name = "front-ingress"
 
     annotations = {
-        "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
     }
   }
-  
+
   spec {
     ingress_class_name = "nginx"
 
     tls {
-      hosts = ["frontend.example.com"]
+      hosts       = ["frontend.example.com"]
       secret_name = kubernetes_secret_v1.frontend_tls.metadata[0].name
     }
 
     rule {
-        host = "frontend.example.com"
+      host = "frontend.example.com"
       http {
         path {
-          path = "/"
+          path      = "/"
           path_type = "Prefix"
-          
+
           backend {
             service {
               name = kubernetes_service_v1.frontend.metadata[0].name
@@ -37,7 +37,7 @@ resource "kubernetes_ingress_v1" "frontend" {
         }
 
         path {
-          path = "/second"
+          path      = "/second"
           path_type = "Prefix"
 
           backend {
