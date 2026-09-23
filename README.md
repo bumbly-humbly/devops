@@ -24,9 +24,15 @@ The frontend was built with simple javascript, html and css. Nginx is used for s
 Metrics server for HPA
 https://kubernetes-sigs.github.io/metrics-server/
 
-**Ingress-Controller**
+**Ingress-Controller**\
+Ingress-nginx-controller was implemented:
+https://github.com/kubernetes/ingress-NGINX
 - cluster/install-ingress-nginx.sh
 - terraform/ingress.tf
+
+Alternatives:
+- Traefik Ingress controller
+- Gateway API
 
 **Bonus I: Network hardening**\
 Not implemented
