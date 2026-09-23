@@ -28,7 +28,7 @@ resource "kubernetes_deployment_v1" "frontend" {
 
           label_selector {
             match_labels = {
-              app = "demo-app"
+              app = "frontend-app"
             }
           }
         }
@@ -36,6 +36,65 @@ resource "kubernetes_deployment_v1" "frontend" {
         container {
           image = var.docker_uri
           name  = "frontend-app"
+
+          port {
+            container_port = 80
+          }
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_deployment_v1" "frontend_2" {
+  metadata {
+    name = "frontend-app-2"
+    labels = {
+      App = "frontend-app-2"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        App = "frontend-app-2"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          App = "frontend-app-2"
+        }
+      }
+
+      spec {
+        topology_spread_constraint {
+          max_skew           = 1
+          topology_key       = "kubernetes.io/hostname"
+          when_unsatisfiable = "DoNotSchedule"
+
+          label_selector {
+            match_labels = {
+              app = "frontend-app-2"
+            }
+          }
+        }
+
+        container {
+          image = var.docker_uri
+          name  = "frontend-app-2"
 
           port {
             container_port = 80

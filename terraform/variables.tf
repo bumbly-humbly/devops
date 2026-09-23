@@ -17,3 +17,13 @@ variable "cluster_ca_certificate" {
 variable "docker_uri" {
   type = string
 }
+
+variable "tls_certificate" {
+  type      = string
+  sensitive = true
+}
+
+variable "tls_private_key" {
+  type      = string
+  sensitive = true
+}
