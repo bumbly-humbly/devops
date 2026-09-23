@@ -2,7 +2,7 @@
 
 
 **Deploy a K8s cluster**
-The kubernetes cluster and resource creation and configuration was done by 2 approaches for learning purposes as well.
+The kind kubernetes cluster and resource creation and configuration was done by 2 approaches for learning purposes as well.
 
 K8s resources where written in yaml and with shell scripts for execution:
 - k8s
@@ -36,3 +36,9 @@ Uptime Kuma seems a simple solution in this project to measure latency and do he
 https://uptimekuma.co/wiki/add-a-monitor-in-uptime-kuma/
 
 **Bonus III: Automation & CI/CD**
+Github Actions is used for CI/CD.
+
+Pushes/merges on the main branch builds and publishes a new version to a container registry.
+.github/workflows/docker-publish.yml
+Terraform checks - Formatting and validation
+.github/workflows/terraform-check.yml
