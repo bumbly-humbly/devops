@@ -1,63 +1,29 @@
-@startuml
-title DevOps Training - repository configuration
+@startuml devops
 left to right direction
-skinparam componentStyle rectangle
+
 skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontSize 18
 
-actor "Browser" as browser
-artifact "frontend/\nHTML, JavaScript, CSS\nNginx configuration" as source
-artifact "ghcr.io/bumbly-humbly/frontend:v1.0.0" as image
-component "frontend/frontend.sh" as build
-component "k8s/deploy.sh" as deploy
+title Terraform, Cluster & CI/CD
 
-node "Kind cluster: kind-cluster" as cluster {
-  node "1 control-plane + 2 workers" as nodes {
-    component "Gateway: app-web\nclass: app-example\nlistener: app-web-gw, HTTP :80" as gateway
-    component "HTTPRoute: frontend-route\nparent: app-web" as route
-    component "Service: frontend-svc\nTCP :80 -> :80\nselector: app=frontend" as service
-    component "Deployment: frontend-deployment\n2 replicas\nspread across node hostnames" as deployment
-    component "Frontend pods\nlabel: app=frontend\nNginx :80\nstatic frontend files" as pods
-    component "HPA: frontend-hpa\n2-4 replicas\nCPU target: 50%" as hpa
-  }
+component "GitHub Actions\nBuild image + check Terraform" as ci #EAF2FF
+artifact "Docker Hub\nFrontend image" as registry #EAF2FF
+component "Terraform\ncluster/ + terraform/" as tf #F0E8FF
+node "Local Kubernetes cluster (kind)" as cluster #EAF7EE {
+  node "1 control plane + 3 workers" as nodes
+  component "Managed resources\nDeployments, Services, Ingress\nTLS Secret, Autoscaler" as resources
 }
 
-source ..> build : build input
-build ..> image : Docker build and push
-image ..> pods : container image
-deploy ..> deployment : kubectl apply
-deploy ..> service : kubectl apply
-deployment ..> pods : manages
-browser --> gateway : configured HTTP request
-gateway --> service : configured forwarding via HTTPRoute
-route ..> gateway : parentRefs: app-web
-route ..> service : backendRefs: frontend-svc :80
-service --> pods : HTTP :80
-hpa ..> deployment : intended scaling target\n(reference mismatch)
+ci --> registry : builds & publishes
+ci ..> tf : validates terraform/
+tf --> cluster : creates (manual apply)
+tf --> resources : configures (manual apply)
+registry --> resources : image pulled at pod startup
 
-note bottom of gateway
-  Gateway and HTTPRoute exist as manifests;
-  their apply commands are commented out in deploy.sh.
-  NGINX Gateway Fabric installation and its Service
-  are not defined in this repository.
+note bottom of ci
+  CI publishes images and validates Terraform.
+  Cluster deployment is manual.
 end note
-
-note bottom of cluster
-  Kind host mappings on the control-plane:
-  host 8080 -> container 31437 (TCP)
-  host 8443 -> container 30478 (TCP)
-  No matching NodePort Service is defined here.
-  External connectivity is not verified.
-end note
-
-note bottom of hpa
-  scaleTargetRef.name is "frontend", but the
-  Deployment is named "frontend-deployment".
-  deploy.sh does not apply the HPA manifest.
-end note
-
-legend bottom
-  Solid arrows: configured request traffic
-  Dotted arrows: build, configuration, or management relationships
-  This diagram describes repository files, not a verified running cluster.
-endlegend
 @enduml
