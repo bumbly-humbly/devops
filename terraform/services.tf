@@ -1,3 +1,5 @@
+# https://kubernetes.io/docs/concepts/services-networking/
+
 resource "kubernetes_service_v1" "frontend" {
   metadata {
     name = "front-svc"

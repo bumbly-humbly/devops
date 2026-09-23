@@ -1,3 +1,7 @@
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+# https://kubernetes.github.io/ingress-nginx/user-guide/tls/
+# https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
+
 resource "kubernetes_ingress_v1" "frontend" {
   metadata {
     name = "front-ingress"
@@ -19,7 +23,7 @@ resource "kubernetes_ingress_v1" "frontend" {
         host = "frontend.example.com"
       http {
         path {
-          path = "/first"
+          path = "/"
           path_type = "Prefix"
           
           backend {
@@ -40,7 +44,7 @@ resource "kubernetes_ingress_v1" "frontend" {
             service {
               name = kubernetes_service_v1.frontend_2.metadata[0].name
               port {
-                number = kubernetes_service_v1.frontend.spec[0].port[0].port
+                number = kubernetes_service_v1.frontend_2.spec[0].port[0].port
               }
             }
           }
