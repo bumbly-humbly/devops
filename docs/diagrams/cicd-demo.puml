@@ -1,0 +1,31 @@
+@startuml ci-cd-demo
+left to right direction
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontSize 18
+skinparam ArrowColor #475569
+skinparam defaultFontName Arial
+
+title Vom git push zur Demo
+
+rectangle "git push\nauf main" as push #EAF2FF
+
+package "GitHub Actions · automatisch" {
+  component "Container-Image bauen\nbei Änderungen in frontend/" as build #EAF2FF
+  component "Terraform prüfen\nterraform/" as checks #F0E8FF
+}
+
+artifact "Docker Hub\nImage veröffentlicht\nlatest + sha-<commit>" as registry #EAF7EE
+rectangle "Terraform-Checks erfolgreich\nfmt -check → init → validate" as validated #EAF7EE
+
+push --> build
+push --> checks
+build --> registry : Build & Push
+checks --> validated
+
+note bottom of checks
+  Auch bei Pull Requests und manuellem Start.
+  Kein automatisches terraform apply.
+end note
+@enduml

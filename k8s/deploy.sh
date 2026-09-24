@@ -9,8 +9,9 @@ K8S_DIR="$SCRIPT_DIR/../k8s"
 
 kubectl apply -f "$K8S_DIR/frontend-deployment.yml"
 kubectl apply -f "$K8S_DIR/frontend-service.yml"
-#kubectl apply -f "$K8S_DIR/gateway.yml"
-#kubectl apply -f "$K8S_DIR/routes.yml"
+kubectl apply -f "$K8S_DIR/gateway.yml"
+kubectl apply -f "$K8S_DIR/routes.yml"
+kubectl apply -f "$K8S_DIR/hardening.yml"
 
 echo "-----Resources deployed successfully to kind cluster-----"
 

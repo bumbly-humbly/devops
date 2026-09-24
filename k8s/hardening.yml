@@ -1,0 +1,37 @@
+# https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-ingress-controller
+  namespace: ingress-nginx
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/component: controller
+
+  policyTypes:
+    - Ingress
+
+  ingress:
+    # Allow HTTPS from any source.
+    - ports:
+        - protocol: TCP
+          port: 443
+
+    # Allow the Kubernetes API server to reach the admission webhook.
+    # Replace this example address with the actual source IP/CIDR
+    # observed by your cluster's networking plugin.
+    - from:
+        - ipBlock:
+            cidr: 192.0.2.10/32
+      ports:
+        - protocol: TCP
+          port: 8443
+
+
+#Persistence: the policy remains in Kubernetes across controller restarts and automatically applies to replacement pods with matching labels.
+#Your deployment automation must reapply it when recreating the cluster.
+#Enforcement requires Cilium, Calico, or another compatible network plugin. 
+#This is an ingress-filtering example; complete hardening would also restrict controller egress and protect backend pods.         

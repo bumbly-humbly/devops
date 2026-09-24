@@ -35,7 +35,8 @@ Alternatives:
 - Gateway API
 
 **Bonus I: Network hardening**\
-Not implemented
+Not implemented\
+Future approach: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
 **Bonus II: Monitoring concept**\
 Uptime Kuma seems a simple solution in this project to measure latency and do health checks. Liveness and Readiness probes.

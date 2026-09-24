@@ -1,6 +1,5 @@
-@startuml devops
+@startuml
 left to right direction
-
 skinparam shadowing false
 skinparam componentStyle rectangle
 skinparam backgroundColor white
@@ -11,15 +10,18 @@ title Terraform, Cluster & CI/CD
 component "GitHub Actions\nBuild image + check Terraform" as ci #EAF2FF
 artifact "Docker Hub\nFrontend image" as registry #EAF2FF
 component "Terraform\ncluster/ + terraform/" as tf #F0E8FF
+component "Kubernetes YAML\nk8s/" as manifests #FFF3DA
+
 node "Local Kubernetes cluster (kind)" as cluster #EAF7EE {
   node "1 control plane + 3 workers" as nodes
-  component "Managed resources\nDeployments, Services, Ingress\nTLS Secret, Autoscaler" as resources
+  component "Kubernetes resources\nDeployments, Services\nTraffic routing, Autoscaler" as resources
 }
 
 ci --> registry : builds & publishes
 ci ..> tf : validates terraform/
 tf --> cluster : creates (manual apply)
 tf --> resources : configures (manual apply)
+manifests --> resources : alternative: apply YAML manually
 registry --> resources : image pulled at pod startup
 
 note bottom of ci
@@ -27,3 +29,4 @@ note bottom of ci
   Cluster deployment is manual.
 end note
 @enduml
+

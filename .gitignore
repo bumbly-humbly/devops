@@ -39,8 +39,8 @@ Thumbs.db
 tmp/
 temp/
 
-AGENTS.md
-
 #certs
 tls/*.crt
 tls/*.key
+
+cluster/demo-tf-cluster-config
