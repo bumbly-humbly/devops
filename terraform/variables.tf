@@ -27,3 +27,8 @@ variable "tls_private_key" {
   type      = string
   sensitive = true
 }
+
+variable "pseudo" {
+  type      = string
+  sensitive = true
+}
